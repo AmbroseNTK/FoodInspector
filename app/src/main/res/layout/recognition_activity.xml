@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="*"
+    android:background="@color/gray50">
+    <TableRow>
+        <TextView android:text="Result"
+            android:id="@+id/textResult"
+            android:textSize="10pt"
+            android:textColor="@color/amber900"
+            android:layout_margin="10dp"
+            android:layout_column="0"/>
+    </TableRow>
+    <TableRow>
+        <TextView android:text="Does your image like these samples?"
+            android:textSize="7pt"
+            android:textColor="@color/amber900"
+            android:layout_margin="10dp"
+            android:layout_column="0"/>
+    </TableRow>
+    <TableRow>
+       <android.support.v7.widget.RecyclerView
+           android:id="@+id/recyclerSampleView"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="150dp"
+           android:layout_column="0">
+
+       </android.support.v7.widget.RecyclerView>
+    </TableRow>
+    <TableRow>
+        <Button android:layout_column="0"
+            android:id="@+id/btOK"
+            android:text="Yes"
+            android:background="@color/amber700"
+            android:layout_margin="10dp"
+            android:elevation="10dp"/>
+    </TableRow>
+    <TableRow>
+        <Button android:layout_column="0"
+            android:id="@+id/btAgain"
+            android:text="No, try again"
+            android:background="@color/amber700"
+            android:layout_margin="10dp"
+            android:elevation="10dp"/>
+    </TableRow>
+</TableLayout>
+</android.support.constraint.ConstraintLayout>

@@ -2,7 +2,9 @@ package ntk.ambrose.foodinspector;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
@@ -25,6 +27,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -32,9 +35,16 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.sdsmdg.tastytoast.TastyToast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ntk.ambrose.foodinspector.recognizer.Classifier;
+import ntk.ambrose.foodinspector.recognizer.ImageClassifierFactory;
+import ntk.ambrose.foodinspector.recognizer.ImageUtilsKt;
+import ntk.ambrose.foodinspector.recognizer.Result;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private FloatingActionButton btCapture;
 
+    private Classifier foodClassifier;
+    private Classifier eatableClassifier;
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -74,14 +86,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initRecognizers();
         initCameraPreview();
         btCapture = findViewById(R.id.btCapture);
         btCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(),"Captured",Toast.LENGTH_SHORT).show();
+               RecognitionActivity.results=new ArrayList<>();
+                Log.i("Classifier","Starting");
+                if(textureView.getBitmap()!=null) {
+                    Log.i("Classifier","Accepted");
+                    classify(textureView.getBitmap());
+                    startActivity(new Intent(MainActivity.this,RecognitionActivity.class));
+                }
             }
         });
+    }
+
+    public void classify(Bitmap photo){
+        Bitmap croppedImage = ImageUtilsKt.getCroppedBitmap(photo);
+        ArrayList<Result> results = eatableClassifier.recognizeImage(croppedImage);
+        if(results.size()>=1){
+            if(results.get(0).getResult().equals("eatable")){
+                RecognitionActivity.results = foodClassifier.recognizeImage(croppedImage);
+            }
+            else{
+                TastyToast.makeText(getBaseContext(),"There are no food!",TastyToast.LENGTH_LONG,TastyToast.CONFUSING).show();
+            }
+        }
+    }
+
+    private Classifier createClassifier(String graphFile, String labelsFile, int imageSize, String inputName, String outputName) {
+        return ImageClassifierFactory.INSTANCE.create(
+                getAssets(),
+                graphFile,
+                labelsFile,
+                imageSize,
+                inputName,
+                outputName
+        );
     }
 
     private void initCameraPreview(){
@@ -106,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
             public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             }
         };
+    }
+
+    private void initRecognizers(){
+        foodClassifier = createClassifier("file:///android_asset/food_graph.pb","file:///android_asset/food_labels.txt",224,"Placeholder","final_result");
+        eatableClassifier = createClassifier("file:///android_asset/eatable_graph.pb","file:///android_asset/eatable_labels.txt",224,"Placeholder","final_result");
     }
 
     private boolean checkCameraHardware(Context context) {
