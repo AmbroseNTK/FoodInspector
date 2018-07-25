@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ntk.ambrose.foodinspector.R;
 
 public class AdapterSampleView extends RecyclerView.Adapter<RecyclerSampleViewHolder>{
-    private List<Bitmap> listData = new ArrayList<>();
+    private List<Bitmap> listData;
 
     public AdapterSampleView(List<Bitmap> listData){
         this.listData = listData;
@@ -27,10 +26,13 @@ public class AdapterSampleView extends RecyclerView.Adapter<RecyclerSampleViewHo
     @Override
     public void onBindViewHolder(RecyclerSampleViewHolder holder, int position) {
         holder.imgSample.setImageBitmap(listData.get(position));
+
     }
 
     @Override
     public int getItemCount() {
+        if(listData==null)
+            return 0;
         return listData.size();
     }
 }

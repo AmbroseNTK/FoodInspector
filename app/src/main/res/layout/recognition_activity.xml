@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <TableLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,14 +24,21 @@
             android:layout_column="0"/>
     </TableRow>
     <TableRow>
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expandableLayout"
+            android:layout_height="100dp"
+            app:el_duration="1000"
+            app:el_expanded="false"
+            app:el_parallax="0.5">
        <android.support.v7.widget.RecyclerView
            android:id="@+id/recyclerSampleView"
            android:orientation="horizontal"
            android:layout_width="match_parent"
            android:layout_height="150dp"
            android:layout_column="0">
-
        </android.support.v7.widget.RecyclerView>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
     </TableRow>
     <TableRow>
         <Button android:layout_column="0"
