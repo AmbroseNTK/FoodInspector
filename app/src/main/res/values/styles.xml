@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/amber900</item>
         <item name="colorPrimaryDark">@color/amber900</item>
         <item name="colorAccent">@color/greenA700</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>

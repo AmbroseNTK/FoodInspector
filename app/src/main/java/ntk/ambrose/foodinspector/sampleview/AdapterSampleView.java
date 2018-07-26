@@ -26,7 +26,7 @@ public class AdapterSampleView extends RecyclerView.Adapter<RecyclerSampleViewHo
     @Override
     public void onBindViewHolder(RecyclerSampleViewHolder holder, int position) {
         holder.imgSample.setImageBitmap(listData.get(position));
-
+        notifyDataSetChanged();
     }
 
     @Override

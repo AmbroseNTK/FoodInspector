@@ -94,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                RecognitionActivity.results=new ArrayList<>();
                 Log.i("Classifier","Starting");
+
+                RecognitionActivity.results = createFakeResult();
+                startActivity(new Intent(MainActivity.this,RecognitionActivity.class));
+
                 if(textureView.getBitmap()!=null) {
                     Log.i("Classifier","Accepted");
                     classify(textureView.getBitmap());
@@ -253,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-
                     createCameraPreview();
                 }
             };
@@ -373,6 +376,13 @@ public class MainActivity extends AppCompatActivity {
         //closeCamera();
         stopBackgroundThread();
         super.onPause();
+    }
+
+    private ArrayList<Result> createFakeResult(){
+        ArrayList<Result> result = new ArrayList<>();
+        result.add(new Result("Rice",0.8f));
+        result.add(new Result("Beefsteak",0.2f));
+        return result;
     }
 
 }
