@@ -1,5 +1,6 @@
 package ntk.ambrose.foodinspector;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,11 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -35,13 +35,15 @@ import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
 import ntk.ambrose.foodinspector.recognizer.Result;
-import ntk.ambrose.foodinspector.sampleview.AdapterSampleView;
+import ntk.ambrose.foodinspector.sampleview.ListImageElement;
+import ntk.ambrose.foodinspector.sampleview.ListViewImageAdapter;
 
 public class RecognitionActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    AdapterSampleView adapterSampleView;
-    List<Bitmap> samples;
+    ListView lvSample;
+    ListViewImageAdapter listViewImageAdapter;
+
+    ArrayList<ListImageElement> samples;
     int currentPos=0;
     TextView textResult;
 
@@ -67,8 +69,14 @@ public class RecognitionActivity extends AppCompatActivity {
     int sourness,saltiness, spice, sweetness, bitterness,nonTaste;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.recognition_activity);
 
         database = FirebaseDatabase.getInstance();
@@ -105,14 +113,9 @@ public class RecognitionActivity extends AppCompatActivity {
         tasteChart=findViewById(R.id.tasteChart);
 
         if(results!=null && results.size()!=0) {
-            recyclerView = findViewById(R.id.recyclerSampleView);
-            adapterSampleView = new AdapterSampleView(samples);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.swapAdapter(adapterSampleView,true);
+            lvSample= findViewById(R.id.lvSample);
+            listViewImageAdapter = new ListViewImageAdapter(samples,getBaseContext());
+            lvSample.setAdapter(listViewImageAdapter);
             viewItem(currentPos);
         }
         else{
@@ -238,7 +241,8 @@ public class RecognitionActivity extends AppCompatActivity {
                 try {
                     Bitmap result = new DownloadImage().execute(dataSnapshot.getValue().toString()).get();
                     if(result!=null){
-                        samples.add(result);
+                        samples.add(new ListImageElement(result));
+                        listViewImageAdapter.notifyDataSetChanged();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -296,7 +300,6 @@ public class RecognitionActivity extends AppCompatActivity {
             },1000,10);
             Log.i("FoodInspector","Confidence = "+progressConfidence.getProgress());
             loadSample(results.get(id).getResult());
-            recyclerView.swapAdapter(adapterSampleView,true);
         }
     }
 

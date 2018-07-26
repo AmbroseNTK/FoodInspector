@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
                RecognitionActivity.results=new ArrayList<>();
                 Log.i("Classifier","Starting");
 
-                RecognitionActivity.results = createFakeResult();
-                startActivity(new Intent(MainActivity.this,RecognitionActivity.class));
+                //RecognitionActivity.results = createFakeResult();
+                //startActivity(new Intent(MainActivity.this,RecognitionActivity.class));
 
                 if(textureView.getBitmap()!=null) {
                     Log.i("Classifier","Accepted");

@@ -35,47 +35,49 @@
             android:id="@+id/expandableLayout"
             android:layout_height="wrap_content"
             app:el_duration="1000"
-            app:el_expanded="false"
+            app:el_expanded="true"
             app:el_parallax="0.5"
             android:background="@color/amber100">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textQuestion1"
+                        android:text="Does your image like these samples?"
+                        android:textSize="7pt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/amber900"
+                        android:layout_margin="10dp"
+                        android:layout_column="0"/>
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:id="@+id/lvSample"
+                        android:layout_above="@id/btOK"
+                        android:layout_below="@id/textQuestion1"/>
+                    <Button
+                        android:id="@+id/btOK"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/amber700"
+                        android:elevation="10dp"
+                        android:text="Yes"
+                        android:layout_above="@id/btAgain"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:text="Does your image like these samples?"
-                    android:textSize="7pt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/amber900"
-                    android:layout_margin="10dp"
-                    android:layout_column="0"/>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerSampleView"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_column="0"
-                    android:orientation="horizontal"/>
+                    <Button
+                        android:id="@+id/btAgain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/amber700"
+                        android:elevation="10dp"
+                        android:text="No, try again"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="10dp"/>
+                </RelativeLayout>
 
-                <Button
-                    android:id="@+id/btOK"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@color/amber700"
-                    android:elevation="10dp"
-                    android:text="Yes" />
-
-                <Button
-                    android:id="@+id/btAgain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:background="@color/amber700"
-                    android:elevation="10dp"
-                    android:text="No, try again" />
-            </LinearLayout>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
     </TableRow>
